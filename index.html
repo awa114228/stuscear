@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+    <meta charset="UTF-8">
+    <title>成績查詢系統 - 模擬頁面</title>
+    <style>
+        body {
+            font-family: "新細明體", "PMingLiU", serif;
+            font-size: 13px;
+            margin: 0;
+            padding: 0;
+            background-color: #FFFFFF;
+        }
+        /* 上方藍色導覽列 */
+        .header-tabs {
+            background-color: #005599;
+            color: white;
+            padding: 5px 10px;
+            display: flex;
+            align-items: center;
+        }
+        .header-tabs span {
+            margin-right: 15px;
+            cursor: pointer;
+        }
+        .active-tab {
+            color: #FFFF00; /* 黃色字體表示當前分頁 */
+            font-weight: bold;
+        }
+        .tab-separator {
+            margin: 0 5px;
+            color: #ccc;
+        }
+
+        /* 主內容區 */
+        .content {
+            padding: 20px;
+            text-align: center;
+        }
+
+        .print-btn {
+            margin-bottom: 5px;
+            padding: 2px 10px;
+            cursor: pointer;
+        }
+
+        .exam-title {
+            color: #0000FF;
+            font-weight: bold;
+            margin-bottom: 15px;
+        }
+
+        .student-info {
+            margin-bottom: 10px;
+            font-weight: bold;
+        }
+
+        /* 成績表格樣式 */
+        table {
+            width: 450px;
+            margin: 0 auto;
+            border-collapse: collapse;
+            border: 1px solid #ccc;
+        }
+        th {
+            background-color: #0000FF;
+            color: white;
+            padding: 5px;
+            font-weight: normal;
+        }
+        td {
+            border: 1px solid #eee;
+            padding: 5px;
+            text-align: left;
+        }
+        .num-col {
+            text-align: right;
+            color: #0000FF;
+            width: 80px;
+        }
+        tr:nth-child(even) {
+            background-color: #F9F9F9;
+        }
+
+        /* 底部統計 */
+        .footer-stats {
+            margin-top: 20px;
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="header-tabs">
+        <span class="active-tab">📝 查詢學生資料</span>
+        <span class="tab-separator">|</span><span>基本資料</span>
+        <span class="tab-separator">|</span><span>綜合表現獎懲</span>
+        <span class="tab-separator">|</span><span>缺曠統計</span>
+        <span class="tab-separator">|</span><span>異動記錄</span>
+        <span class="tab-separator">|</span><span>歷年成績</span>
+        <span class="tab-separator">|</span><span>各式成績查詢</span>
+    </div>
+
+    <div class="content">
+        <button class="print-btn" onclick="window.print()">列印</button>
+        <div class="exam-title">【706】【114下】114-2第一次段考成績</div>
+        
+        <div class="student-info">
+            學號：114228 &nbsp;&nbsp; 姓名：林昊霆 &nbsp;&nbsp; 班級：706
+        </div>
+
+        <table>
+            <thead>
+                <tr>
+                    <th>考試科目</th>
+                    <th>考試成績</th>
+                    <th>全班平均</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>國語文</td>
+                    <td class="num-col">68</td>
+                    <td class="num-col">64.74</td>
+                </tr>
+                <tr>
+                    <td>數學</td>
+                    <td class="num-col">90</td>
+                    <td class="num-col">74.77</td>
+                </tr>
+                <tr>
+                    <td>英語文</td>
+                    <td class="num-col">92</td>
+                    <td class="num-col">80.77</td>
+                </tr>
+                <tr>
+                    <td>社會</td>
+                    <td class="num-col">98</td>
+                    <td class="num-col">85.07</td>
+                </tr>
+                <tr>
+                    <td>生物</td>
+                    <td class="num-col">95</td>
+                    <td class="num-col">80.98</td>
+                </tr>
+                <tr>
+                    <td>英會</td>
+                    <td class="num-col">98</td>
+                    <td class="num-col">94.56</td>
+                </tr>
+            </tbody>
+        </table>
+
+        <div class="footer-stats">
+            <span>總分：2221</span>
+            <span>平均：88.84</span>
+            <span>排名：5</span>
+            <span>年級排名：24</span>
+            <span>類組排名：</span>
+        </div>
+    </div>
+
+</body>
+</html>
