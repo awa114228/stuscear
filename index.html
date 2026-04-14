@@ -2,181 +2,203 @@
 <html lang="zh-Hant">
 <head>
     <meta charset="UTF-8">
-    <title>成績查詢系統</title>
+    <title>君毅中學 - 學生線上系統</title>
     <style>
-        body {
-            /* 強制使用新細明體，這是還原「校務系統感」的關鍵 */
+        /* 全域字體設定：強制使用新細明體以還原點陣感 */
+        body, table, input, button {
             font-family: "新細明體", "PMingLiU", "MingLiU", serif;
-            font-size: 12px; /* 標準校務系統字體大小 */
-            line-height: 1.5;
+            font-size: 12px;
             margin: 0;
             padding: 0;
-            background-color: #FFFFFF;
-            -webkit-text-size-adjust: none; /* 防止行動裝置自動縮放字體 */
+            color: #000;
         }
 
-        /* 頂部藍色 Tab 欄 */
-        .header-tabs {
-            background-color: #0054A6;
-            color: #FFFFFF;
-            font-size: 13px;
-            padding: 4px 10px;
+        /* 頂部深藍色標題列 */
+        .top-bar {
+            background: linear-gradient(to bottom, #005bb7 0%, #003366 100%);
+            height: 28px;
             display: flex;
             align-items: center;
+            color: white;
+            padding: 0 5px;
             border-bottom: 1px solid #000;
         }
-        
-        .active-tab {
-            color: #FFFF00; /* 經典黃色選中態 */
-            font-weight: bold;
-            text-decoration: none;
+
+        /* 左側選單區 */
+        .sidebar {
+            width: 170px;
+            background-color: #385a8a;
+            color: white;
+            position: absolute;
+            top: 28px;
+            bottom: 0;
+            left: 0;
+            padding: 5px;
+            border-right: 1px solid #000;
         }
 
-        .tab-item {
-            color: #FFFFFF;
-            text-decoration: none;
-            margin: 0 4px;
-        }
+        /* 模擬樹狀目錄 */
+        .tree-item { margin: 4px 0; cursor: pointer; display: flex; align-items: center; }
+        .tree-icon { width: 16px; height: 16px; margin-right: 3px; }
+        .folder-icon { color: #ffd700; margin-right: 4px; }
+        .menu-link { color: #ccffff; text-decoration: none; }
+        .menu-link:hover { text-decoration: underline; }
 
-        /* 主區域 */
-        .main-container {
-            padding: 15px;
+        /* 離開按鈕 */
+        .exit-btn {
+            background: linear-gradient(to bottom, #7799cc 0%, #335588 100%);
+            border: 1px solid #fff;
+            color: white;
+            padding: 2px 5px;
+            margin: 10px 0;
             text-align: center;
+            cursor: pointer;
+            width: 90%;
+            font-size: 11px;
         }
 
-        /* 按鈕樣式 */
-        .btn-print {
-            font-family: "新細明體", serif;
-            font-size: 12px;
-            padding: 1px 4px;
-            margin-bottom: 10px;
+        /* 右側主內容區 */
+        .main-frame {
+            position: absolute;
+            top: 28px;
+            left: 171px;
+            right: 0;
+            bottom: 0;
+            background-color: #fff;
+            overflow-y: auto;
         }
 
-        /* 標題與個人資訊 */
-        .exam-title {
-            color: #0000FF;
-            font-weight: bold;
-            margin-bottom: 8px;
-            font-size: 14px;
+        /* 分頁標籤列 */
+        .tab-bar {
+            background-color: #e6eff9;
+            background: linear-gradient(to bottom, #ffffff 0%, #a0c0e0 100%);
+            height: 25px;
+            border-bottom: 1px solid #6688aa;
+            display: flex;
+            align-items: center;
+            padding: 0 10px;
         }
+        .active-tab { color: #000080; font-weight: bold; margin-right: 10px; display: flex; align-items: center; }
+        .tab-item { color: #000000; text-decoration: none; margin: 0 5px; }
 
-        .student-info {
-            font-size: 12px;
-            margin-bottom: 12px;
-        }
+        /* 內容區塊 */
+        .content-body { padding: 15px; text-align: center; }
+        .exam-title { color: #0000FF; font-weight: bold; margin: 10px 0; font-size: 13px; }
+        .student-info { margin-bottom: 10px; font-weight: bold; }
 
-        /* 表格精確還原 */
+        /* 表格樣式細化 */
         .score-table {
-            width: 420px;
+            width: 480px;
             margin: 0 auto;
             border-collapse: collapse;
-            border: 1px solid #666666;
+            border: 1px solid #999;
         }
-
         .score-table th {
-            background-color: #0000FF; /* 鮮藍色背景 */
-            color: #FFFFFF;
+            background-color: #0000FF;
+            color: white;
             font-weight: normal;
-            padding: 3px 5px;
-            border: 1px solid #666666;
+            padding: 3px;
+            border: 1px solid #999;
         }
-
         .score-table td {
-            padding: 3px 8px;
-            border: 1px solid #CCCCCC;
-            height: 20px;
+            padding: 4px 10px;
+            border: 1px solid #ccc;
         }
-
-        /* 分數欄位特殊藍色與對齊 */
-        .score-cell {
-            color: #0000FF;
-            text-align: right;
-            width: 80px;
-        }
-
-        .subject-cell {
-            text-align: left;
-            background-color: #FFFFFF;
-        }
-
-        /* 隔行變色 */
-        .row-even {
-            background-color: #F2F2F2;
-        }
+        .num-cell { text-align: right; color: #0000FF; width: 80px; }
+        .row-even { background-color: #f2f2f2; }
 
         /* 底部統計資訊 */
-        .stats-row {
-            margin-top: 15px;
-            font-size: 13px;
-            word-spacing: 15px; /* 模擬空格間距 */
+        .footer-stats {
+            margin-top: 20px;
+            display: flex;
+            justify-content: center;
+            gap: 25px;
+            font-weight: bold;
+        }
+
+        /* 側欄信箱模擬 */
+        .mailbox-area {
+            margin-top: 30px;
+            text-align: center;
+            background: #fff;
+            padding: 10px 0;
+            color: #ff0000;
+            font-size: 16px;
+            font-weight: bold;
+            border-top: 1px solid #999;
+            border-bottom: 1px solid #999;
         }
     </style>
 </head>
 <body>
 
-    <div class="header-tabs">
-        <span class="active-tab">📝 查詢學生資料</span>
-        <span style="color:#ccc; margin:0 5px;">|</span><a href="#" class="tab-item">基本資料</a>
-        <span style="color:#ccc; margin:0 5px;">|</span><a href="#" class="tab-item">綜合表現獎懲</a>
-        <span style="color:#ccc; margin:0 5px;">|</span><a href="#" class="tab-item">缺曠統計</a>
-        <span style="color:#ccc; margin:0 5px;">|</span><a href="#" class="tab-item">異動記錄</a>
-        <span style="color:#ccc; margin:0 5px;">|</span><a href="#" class="tab-item">歷年成績</a>
-        <span style="color:#ccc; margin:0 5px;">|</span><a href="#" class="tab-item">各式成績查詢</a>
+    <div class="top-bar">
+        <span style="margin-right:auto">🏠 💾 🌐 主選單</span>
     </div>
 
-    <div class="main-container">
-        <input type="button" value="列印" class="btn-print">
+    <div class="sidebar">
+        <div class="tree-item">📂 <span class="menu-link">學生 林昊霆 的資料</span></div>
+        <div style="margin-left: 15px;">
+            <div class="tree-item">📄 <span class="menu-link">查詢學生資料</span></div>
+            <div class="tree-item">📄 <span class="menu-link">公共服務時數</span></div>
+            <div class="tree-item">➕ <span class="menu-link">附屬進階設定/應用</span></div>
+        </div>
         
-        <div class="exam-title">【706】【114下】114-2第一次段考成績</div>
+        <div class="exit-btn">📤 離開視窗<br>Leave Exit</div>
+
+        <div class="mailbox-area">
+            No message 📮
+        </div>
         
-        <div class="student-info">
-            學號：114228 &nbsp;&nbsp; 姓名：林昊霆 &nbsp;&nbsp; 班級：706
+        <div style="text-align:center; margin-top:10px;">
+            📧 <span style="text-decoration:underline; cursor:pointer">寫一封信</span>
+        </div>
+    </div>
+
+    <div class="main-frame">
+        <div class="tab-bar">
+            <span class="active-tab">📋 查詢學生資料</span>
+            <span style="color:#999">|</span><a href="#" class="tab-item">基本資料</a>
+            <span style="color:#999">|</span><a href="#" class="tab-item">綜合表現獎懲</a>
+            <span style="color:#999">|</span><a href="#" class="tab-item">缺曠統計</a>
+            <span style="color:#999">|</span><a href="#" class="tab-item">異動記錄</a>
+            <span style="color:#999">|</span><a href="#" class="tab-item">歷年成績</a>
+            <span style="color:#999">|</span><a href="#" class="tab-item">各式成績查詢</a>
         </div>
 
-        <table class="score-table">
-            <thead>
-                <tr>
-                    <th>考試科目</th>
-                    <th>考試成績</th>
-                    <th>全班平均</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr>
-                    <td class="subject-cell">國語文</td>
-                    <td class="score-cell">100</td>
-                    <td class="score-cell">64.74</td>
-                </tr>
-                <tr class="row-even">
-                    <td class="subject-cell">數學</td>
-                    <td class="score-cell">100</td>
-                    <td class="score-cell">74.77</td>
-                </tr>
-                <tr>
-                    <td class="subject-cell">英語文</td>
-                    <td class="score-cell">100</td>
-                    <td class="score-cell">80.77</td>
-                </tr>
-                <tr class="row-even">
-                    <td class="subject-cell">社會</td>
-                    <td class="score-cell">100</td>
-                    <td class="score-cell">85.07</td>
-                </tr>
-                <tr>
-                    <td class="subject-cell">生物</td>
-                    <td class="score-cell">100</td>
-                    <td class="score-cell">80.98</td>
-                </tr>
-                <tr class="row-even">
-                    <td class="subject-cell">英會</td>
-                    <td class="score-cell">100</td>
-                    <td class="score-cell">94.56</td>
-                </tr>
-            </tbody>
-        </table>
+        <div class="content-body">
+            <button style="font-size:11px">列印</button>
+            <div class="exam-title"><u>【706】【114下】114-2第一次段考成績</u></div>
+            
+            <div class="student-info">
+                學號：114228 &nbsp;&nbsp; 姓名：林昊霆 &nbsp;&nbsp; 班級：706
+            </div>
 
-        <div class="stats-row">
-            總分：600 &nbsp;&nbsp; 平均：100.00 &nbsp;&nbsp; 排名：1 &nbsp;&nbsp; 年級排名：1 &nbsp;&nbsp; 類組排名：
+            <table class="score-table">
+                <thead>
+                    <tr>
+                        <th>考試科目</th>
+                        <th>考試成績</th>
+                        <th>全班平均</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr><td>國語文</td><td class="num-cell">100</td><td class="num-cell">64.74</td></tr>
+                    <tr class="row-even"><td>數學</td><td class="num-cell">100</td><td class="num-cell">74.77</td></tr>
+                    <tr><td>英語文</td><td class="num-cell">100</td><td class="num-cell">80.77</td></tr>
+                    <tr class="row-even"><td>社會</td><td class="num-cell">100</td><td class="num-cell">85.07</td></tr>
+                    <tr><td>生物</td><td class="num-cell">100</td><td class="num-cell">80.98</td></tr>
+                    <tr class="row-even"><td>英會</td><td class="num-cell">100</td><td class="num-cell">94.56</td></tr>
+                </tbody>
+            </table>
+
+            <div class="footer-stats">
+                <span>總分：600</span>
+                <span>平均：100.00</span>
+                <span>排名：1</span>
+                <span>年級排名：1</span>
+                <span>類組排名：</span>
+            </div>
         </div>
     </div>
 
